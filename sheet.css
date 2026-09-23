@@ -1,0 +1,3033 @@
+/* =========================================================
+   C&C ROLL20 CHARACTER SHEET
+   VERSION: 0.21.17
+   BASE: 0.17.2
+   STATUS: TEST BUILD
+   BUILD: Abilities UX / Execution Controls
+   ========================================================= */
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+.sheet-cc {
+    box-sizing: border-box;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #282828;
+    background: #f5f5f5;
+}
+
+.sheet-cc * {
+    box-sizing: border-box;
+}
+
+.sheet-cc input,
+.sheet-cc select,
+.sheet-cc button,
+.sheet-cc textarea {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+   ========================================================= */
+
+.sheet-tabs {
+    display: flex;
+    gap: 0;
+    background: #1f1f1f;
+    border-bottom: 1px solid #555555;
+}
+
+.sheet-tab-button {
+    min-width: 105px;
+    height: 32px;
+    margin: 0 !important;
+    padding: 5px 14px !important;
+    border: 0 !important;
+    border-right: 1px solid #555555 !important;
+    border-radius: 0 !important;
+    background: #1f1f1f !important;
+    color: #cccccc !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    letter-spacing: .7px;
+    cursor: pointer;
+}
+
+.sheet-tab-button:hover {
+    background: #333333 !important;
+    color: #ffffff !important;
+}
+
+.sheet-page {
+    display: none;
+}
+
+/* v0.19.1 - ORDER-INDEPENDENT PAGE VISIBILITY
+   Each page is selected by the hidden sheet_page value and may sit
+   anywhere after that state input in the sheet markup. */
+.sheet-page-state[value="core"] ~ .sheet-page-core { display:block; }
+.sheet-page-state[value="combat"] ~ .sheet-page-combat { display:block; }
+.sheet-page-state[value="inventory"] ~ .sheet-page-inventory { display:block; }
+.sheet-page-state[value="magic"] ~ .sheet-page-magic { display:block; }
+.sheet-page-state[value="abilities"] ~ .sheet-page-abilities { display:block; }
+.sheet-page-state[value="classes"] ~ .sheet-page-classes { display:block; }
+.sheet-page-state[value="tools"] ~ .sheet-page-tools { display:block; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #292929;
+    color: #ffffff;
+    border-bottom: 4px solid #7b1113;
+}
+
+.sheet-name-block {
+    flex: 1;
+}
+
+.sheet-kicker {
+    margin-bottom: 2px;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1.4px;
+    color: #d6b46a;
+}
+
+.sheet-character-name {
+    width: 100%;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: rgba(0,0,0,0) !important;
+    color: #ffffff !important;
+    font-size: 22px !important;
+    font-weight: bold;
+}
+
+.sheet-character-name::placeholder {
+    color: #aaaaaa;
+}
+
+.sheet-identity {
+    display: flex;
+    gap: 7px;
+    align-items: end;
+}
+
+.sheet-identity label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+}
+
+.sheet-identity label span {
+    font-size: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #bbbbbb;
+}
+
+.sheet-identity input {
+    height: 27px;
+    margin: 0;
+    border: 1px solid #555555;
+    background: #ffffff;
+}
+
+.sheet-identity input[type="text"] {
+    width: 115px;
+}
+
+.sheet-level input {
+    width: 50px;
+}
+
+
+/* =========================================================
+   COMBAT STRIP
+   ========================================================= */
+
+.sheet-combat-strip {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    border-top: 0;
+}
+
+.sheet-combat-stat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 38px;
+    padding: 4px 9px;
+    border-right: 1px solid #dddddd;
+}
+
+.sheet-combat-stat:last-child {
+    border-right: 0;
+}
+
+.sheet-stat-label {
+    font-size: 10px;
+    font-weight: bold;
+    color: #666666;
+}
+
+.sheet-combat-stat input {
+    width: 44px;
+    height: 25px;
+    margin: 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.sheet-hp-stat input {
+    width: 48px;
+}
+
+.sheet-slash {
+    color: #777777;
+    font-weight: bold;
+}
+
+.sheet-mini-roll {
+    width: 28px !important;
+    height: 25px;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* =========================================================
+   ARMOUR CLASS - v0.6.1
+   ========================================================= */
+
+.sheet-ac-stat input {
+    background: #eeeeee !important;
+    color: #7b1113;
+}
+
+.sheet-ac-breakdown {
+    padding: 6px 8px;
+    border: 1px solid #cccccc;
+    border-top: 0;
+    background: #f0f0f0;
+}
+
+.sheet-ac-formula {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.sheet-ac-title {
+    align-self: center;
+    color: #7b1113;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.sheet-ac-equals,
+.sheet-ac-plus {
+    align-self: center;
+    color: #666666;
+    font-weight: bold;
+}
+
+.sheet-ac-part {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    margin: 0;
+}
+
+.sheet-ac-part > span {
+    color: #666666;
+    font-size: 7px;
+    font-weight: bold;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.sheet-ac-formula input[type="text"],
+.sheet-ac-formula input[type="number"] {
+    box-sizing: border-box;
+    width: 48px !important;
+    min-width: 48px;
+    margin: 0 !important;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.sheet-ac-formula .sheet-ac-total {
+    width: 52px !important;
+    min-width: 52px;
+    color: #7b1113;
+    font-size: 13px;
+}
+
+.sheet-ac-readonly {
+    background: #e4e4e4 !important;
+    color: #444444;
+}
+
+.sheet-ac-warning {
+    box-sizing: border-box;
+    width: 100% !important;
+    height: auto !important;
+    margin: 5px 0 0 !important;
+    padding: 3px 5px !important;
+    border: 0 !important;
+    background: rgba(0,0,0,0) !important;
+    color: #8b0000 !important;
+    font-size: 9px !important;
+    font-weight: bold;
+}
+
+.sheet-ac-warning[value=""] {
+    display: none;
+}
+
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.sheet-panel {
+    margin-top: 8px;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+}
+
+.sheet-section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 30px;
+    padding: 4px 9px;
+    background: #7b1113;
+    color: #ffffff;
+}
+
+.sheet-section-title h2 {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    text-transform: uppercase;
+}
+
+.sheet-section-title span {
+    font-size: 8px;
+    text-transform: uppercase;
+    color: #e0cfcf;
+}
+
+
+/* =========================================================
+   ATTRIBUTES
+   ========================================================= */
+
+.sheet-attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: #dddddd;
+}
+
+.sheet-attribute-card {
+    display: grid;
+    grid-template-columns: 44px minmax(38px, 1fr) minmax(38px, 1fr) 42px;
+    align-items: center;
+    gap: 4px;
+    min-height: 39px;
+    padding: 5px;
+    background: #ffffff;
+}
+
+.sheet-attribute-roll {
+    height: 27px;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 3px;
+    background: #7b1113 !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    cursor: pointer;
+}
+
+.sheet-attribute-roll:hover {
+    background: #981518 !important;
+}
+
+.sheet-attribute-score,
+.sheet-attribute-mod {
+    width: 100% !important;
+    height: 26px;
+    margin: 0 !important;
+    text-align: center;
+    font-size: 12px;
+}
+
+.sheet-attribute-score {
+    font-weight: bold;
+}
+
+.sheet-attribute-mod {
+    color: #7b1113;
+    font-weight: bold;
+    background: #eeeeee !important;
+}
+
+.sheet-prime-select {
+    width: 100% !important;
+    height: 26px;
+    margin: 0 !important;
+    padding: 1px !important;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+/* =========================================================
+   WEAPONS
+   ========================================================= */
+
+.sheet-weapon-card {
+    padding: 6px 7px;
+    border-bottom: 1px solid #dddddd;
+    background: #ffffff;
+}
+
+.sheet-weapon-card:last-child {
+    border-bottom: 0;
+}
+
+.sheet-weapon-main {
+    display: grid;
+    grid-template-columns: 72px minmax(150px, 1fr) 48px 62px 54px 54px 72px;
+    gap: 5px;
+    align-items: end;
+}
+
+.sheet-weapon-main input,
+.sheet-weapon-main select {
+    width: 100%;
+    height: 27px;
+    margin: 0;
+}
+
+.sheet-weapon-name {
+    font-weight: bold;
+}
+
+.sheet-attack-total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 27px;
+    border-radius: 3px;
+    background: #eeeeee;
+    color: #7b1113;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.sheet-small-field {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 0;
+}
+
+.sheet-small-field span {
+    font-size: 7px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    color: #777777;
+}
+
+.sheet-small-field input {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+}
+
+.sheet-attack-button {
+    width: 100% !important;
+    height: 27px;
+    margin: 0 !important;
+    padding: 3px 6px !important;
+    border: 0 !important;
+    border-radius: 3px !important;
+    background: #7b1113 !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    cursor: pointer;
+}
+
+.sheet-attack-button:hover {
+    background: #981518 !important;
+}
+
+.sheet-weapon-detail {
+    display: grid;
+    grid-template-columns: 48px 75px 62px 54px minmax(150px, 1fr);
+    gap: 5px;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.sheet-detail-label {
+    font-size: 8px;
+    font-weight: bold;
+    text-align: right;
+    text-transform: uppercase;
+    color: #777777;
+}
+
+.sheet-weapon-detail input,
+.sheet-weapon-detail select {
+    width: 100%;
+    height: 24px;
+    margin: 0;
+}
+
+.sheet-damage-dice {
+    text-align: center;
+    font-weight: bold;
+}
+
+.sheet-weapon-notes {
+    font-size: 10px;
+    font-style: italic;
+}
+
+
+/* =========================================================
+   INVENTORY HEADER
+   ========================================================= */
+
+.sheet-inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #292929;
+    color: #ffffff;
+    border-bottom: 4px solid #7b1113;
+}
+
+.sheet-inventory-header h1 {
+    margin: 0 !important;
+    color: #ffffff !important;
+    font-size: 22px !important;
+}
+
+.sheet-inventory-totals {
+    display: flex;
+    gap: 7px;
+}
+
+.sheet-total-box {
+    min-width: 95px;
+    padding: 5px 8px;
+    border: 1px solid #555555;
+    background: #ffffff;
+    text-align: center;
+}
+
+.sheet-total-box span {
+    display: block;
+    margin-bottom: 2px;
+    color: #666666;
+    font-size: 7px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.sheet-total-box strong {
+    color: #7b1113;
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   INVENTORY - v0.5.1
+   ========================================================= */
+
+.sheet-inventory-panel {
+    margin-top: 8px;
+}
+
+.sheet-inventory-column-headings {
+    display: grid;
+    grid-template-columns:
+        minmax(180px, 1fr)
+        92px
+        58px
+        78px
+        68px
+        68px
+        72px;
+    gap: 6px;
+    padding: 5px 7px;
+    border-bottom: 1px solid #dddddd;
+    background: #eeeeee;
+}
+
+.sheet-inventory-column-headings span {
+    font-size: 7px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    color: #666666;
+}
+
+.sheet-inventory-column-headings span:first-child,
+.sheet-inventory-column-headings span:nth-child(2) {
+    text-align: left;
+}
+
+.sheet-inventory-card {
+    padding: 6px 7px;
+    border-bottom: 1px solid #dddddd;
+    background: #ffffff;
+}
+
+.sheet-inventory-main {
+    display: grid;
+    grid-template-columns:
+        minmax(180px, 1fr)
+        92px
+        58px
+        78px
+        68px
+        68px
+        72px;
+    gap: 6px;
+    align-items: center;
+}
+
+.sheet-inventory-main input[type="text"],
+.sheet-inventory-main select {
+    width: 100% !important;
+    height: 32px;
+    margin: 0 !important;
+}
+
+.sheet-item-name {
+    padding-left: 7px !important;
+    font-weight: bold;
+}
+
+.sheet-inventory-main input[type="number"] {
+    width: 100% !important;
+    min-width: 0;
+    margin: 0 !important;
+    padding-left: 5px !important;
+    padding-right: 4px !important;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.sheet-inventory-main select {
+    padding-left: 4px !important;
+    font-size: 10px;
+}
+
+.sheet-check-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    min-height: 32px;
+    margin: 0;
+}
+
+.sheet-check-field input[type="checkbox"] {
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0 !important;
+}
+
+.sheet-check-field span {
+    display: none;
+    font-size: 7px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #777777;
+}
+
+.sheet-item-details {
+    margin-top: 5px;
+    padding-top: 4px;
+    border-top: 1px dashed #dddddd;
+}
+
+.sheet-item-details summary {
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 2px;
+    background: #eeeeee;
+    color: #7b1113;
+    font-size: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.sheet-item-details summary:hover {
+    background: #dddddd;
+}
+
+.sheet-item-detail-grid {
+    display: grid;
+    grid-template-columns:
+        110px
+        minmax(180px, 1fr)
+        85px
+        85px;
+    gap: 7px;
+    margin-top: 7px;
+    padding: 7px;
+    border: 1px solid #dddddd;
+    background: #fafafa;
+}
+
+.sheet-item-detail-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+}
+
+.sheet-item-detail-grid label span {
+    font-size: 7px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666666;
+}
+
+.sheet-item-detail-grid input {
+    width: 100%;
+    height: 26px;
+    margin: 0;
+}
+
+.sheet-item-notes-field {
+    grid-column: 1 / -1;
+}
+
+.sheet-item-notes-field textarea {
+    width: 100%;
+    min-height: 55px;
+    margin: 0;
+    resize: vertical;
+}
+
+.sheet-inventory-note {
+    margin-top: 8px;
+    padding: 7px 9px;
+    border: 1px solid #d8d0b9;
+    background: #f4f0e5;
+    color: #555555;
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   SMALLER VIEWPORTS
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+    .sheet-attributes-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sheet-combat-strip {
+        flex-wrap: wrap;
+    }
+
+    .sheet-inventory-column-headings {
+        display: none;
+    }
+
+    .sheet-inventory-main {
+        grid-template-columns:
+            minmax(160px, 1fr)
+            95px
+            58px
+            75px
+            65px;
+    }
+
+    .sheet-check-field {
+        flex-direction: row;
+        gap: 4px;
+    }
+
+    .sheet-check-field span {
+        display: inline;
+    }
+
+    .sheet-item-detail-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+/* =========================================================
+   VERY NARROW VIEWPORTS
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+    .sheet-header,
+    .sheet-inventory-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sheet-inventory-totals {
+        width: 100%;
+    }
+
+    .sheet-total-box {
+        flex: 1;
+    }
+
+    .sheet-attributes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sheet-weapon-main {
+        grid-template-columns:
+            68px
+            minmax(125px, 1fr)
+            45px
+            58px
+            50px
+            50px
+            68px;
+    }
+
+    .sheet-weapon-main .sheet-attack-button {
+        grid-column: auto;
+    }
+
+    .sheet-weapon-detail {
+        grid-template-columns:
+            48px
+            70px
+            58px
+            50px;
+    }
+
+    .sheet-weapon-notes {
+        grid-column: 1 / -1;
+    }
+
+    .sheet-inventory-main {
+        grid-template-columns:
+            minmax(140px, 1fr)
+            90px
+            58px;
+    }
+
+    .sheet-check-field {
+        min-height: 25px;
+    }
+
+    .sheet-item-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sheet-item-notes-field {
+        grid-column: auto;
+    }
+}
+
+
+/* =========================================================
+   MAGIC - v0.20.0
+   Expandable spellbook prototype
+   ========================================================= */
+
+.sheet-magic-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:12px 14px;
+    background:#292929;
+    color:#ffffff;
+    border-bottom:4px solid #7b1113;
+}
+.sheet-magic-header h1 { margin:0; color:#fff; font-size:22px; }
+.sheet-magic-header p { margin:3px 0 0; color:#ccc; font-size:10px; }
+.sheet-magic-help { display:flex; flex-direction:column; min-width:235px; padding:7px 9px; border:1px solid #555; background:#202020; }
+.sheet-magic-help strong { color:#d6b46a; font-size:10px; text-transform:uppercase; letter-spacing:.5px; }
+.sheet-magic-help span { margin-top:2px; color:#ccc; font-size:9px; }
+
+.sheet-spellbook-panel { margin-top:8px; }
+.sheet-spell-drop-hint {
+    margin:8px;
+    padding:8px 12px;
+    border:2px dashed #9a3a3c;
+    background:#fff8f2;
+    color:#7b1113;
+    text-align:center;
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:.45px;
+}
+.sheet-spell-card {
+    margin:5px 8px;
+    border:1px solid #c9c9c9;
+    border-left:4px solid #7b1113;
+    background:#fff;
+    box-shadow:0 1px 2px rgba(0,0,0,.08);
+}
+.sheet-spell-source {
+    display:none !important;
+    width:0 !important;
+    height:0 !important;
+    min-height:0 !important;
+    padding:0 !important;
+    margin:0 !important;
+    border:0 !important;
+    overflow:hidden !important;
+}
+
+.sheet-spell-book-entry { margin:0; }
+.sheet-spell-collapsed {
+    display:grid;
+    grid-template-columns:18px minmax(180px,1fr) minmax(90px,150px) 92px 48px;
+    gap:7px;
+    align-items:center;
+    min-height:34px;
+    padding:4px 8px;
+    background:#f7f7f7;
+    cursor:pointer;
+    list-style:none;
+}
+.sheet-spell-collapsed::-webkit-details-marker { display:none; }
+.sheet-spell-chevron::before {
+    content:"▶";
+    color:#7b1113;
+    font-size:10px;
+    font-weight:bold;
+}
+.sheet-spell-book-entry[open] .sheet-spell-chevron::before { content:"▼"; }
+
+.sheet-spell-collapsed-name {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#2b2b2b;
+    font-size:12px;
+    font-weight:bold;
+}
+.sheet-spell-collapsed-name:empty::before {
+    content:"New Spell — expand to import or enter manually";
+    color:#888;
+    font-style:italic;
+    font-weight:normal;
+}
+.sheet-spell-collapsed-list {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#777;
+    font-size:9px;
+    text-align:right;
+}
+.sheet-spell-collapsed-level {
+    display:flex;
+    justify-content:flex-end;
+    gap:3px;
+    color:#7b1113;
+    font-size:9px;
+    font-weight:bold;
+}
+.sheet-spell-collapsed-level > span:first-child {
+    color:#777;
+    font-size:8px;
+}
+
+.sheet-spell-expanded { border-top:1px solid #ddd; }
+.sheet-spell-main {
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+    padding:7px 8px;
+    background:#fbfbfb;
+    border-bottom:1px solid #eee;
+}
+.sheet-spell-identity { min-width:0; flex:1; }
+.sheet-spell-name { width:100%; height:30px; margin:0; font-size:14px !important; font-weight:bold; color:#2b2b2b; }
+.sheet-spell-meta { display:grid; grid-template-columns:auto 50px auto minmax(100px,180px); gap:5px; align-items:center; margin-top:4px; }
+.sheet-spell-meta span { font-size:8px; font-weight:bold; text-transform:uppercase; color:#777; }
+.sheet-spell-meta input { width:100%; height:24px; margin:0; font-size:10px; }
+.sheet-spell-actions { display:flex; gap:5px; align-items:center; }
+.sheet-cast-button {
+    height:30px !important;
+    margin:0 !important;
+    padding:0 12px !important;
+    border:1px solid #5d0d0f !important;
+    background:#7b1113 !important;
+    color:#fff !important;
+    font-size:10px !important;
+    font-weight:bold !important;
+}
+.sheet-compendium-button { width:30px !important; height:30px !important; margin:0 !important; }
+
+.sheet-spell-summary {
+    display:grid;
+    grid-template-columns:70px 1.15fr 1.15fr .85fr 70px;
+    gap:6px;
+    padding:7px 8px;
+}
+.sheet-spell-summary label,
+.sheet-spell-detail-grid label { display:flex; flex-direction:column; gap:2px; margin:0; }
+.sheet-spell-summary span,
+.sheet-spell-detail-grid span { font-size:8px; font-weight:bold; text-transform:uppercase; color:#777; }
+.sheet-spell-summary input,
+.sheet-spell-detail-grid input { width:100%; height:27px; margin:0; }
+
+.sheet-spell-detail-grid {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:7px;
+    padding:0 8px 8px;
+}
+.sheet-spell-wide { grid-column:1 / -1; }
+.sheet-spell-detail-grid textarea { width:100%; min-height:48px; margin:0; resize:vertical; }
+.sheet-spell-description { min-height:105px !important; line-height:1.35; }
+
+.sheet-spell-import-zone {
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    margin:0 8px 8px;
+    padding:9px 12px;
+    border:2px dashed #b98c8d;
+    background:#fff8f2;
+    color:#666;
+    text-align:center;
+}
+.sheet-spell-import-zone strong { color:#7b1113; font-size:9px; letter-spacing:.5px; }
+.sheet-spell-import-zone span { font-size:9px; }
+
+.sheet-magic-note { margin-top:8px; padding:8px 10px; border:1px solid #d6c7a5; background:#fffaf0; color:#555; font-size:9px; }
+
+@media (max-width:720px) {
+    .sheet-magic-header { align-items:stretch; flex-direction:column; }
+    .sheet-magic-help { min-width:0; }
+    .sheet-spell-collapsed { grid-template-columns:18px minmax(120px,1fr) 88px 42px; }
+    .sheet-spell-collapsed-list { display:none; }
+    .sheet-spell-main { align-items:stretch; }
+    .sheet-spell-meta { grid-template-columns:auto 45px auto minmax(80px,1fr); }
+    .sheet-spell-summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .sheet-spell-detail-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+
+/* =========================================================
+   ABILITIES - v0.8
+   ========================================================= */
+
+
+.sheet-abilities-header {
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    padding:12px 14px; background:#292929; color:#fff; border-bottom:4px solid #7b1113;
+}
+.sheet-abilities-header h1 { margin:0 !important; color:#fff !important; font-size:22px !important; }
+.sheet-abilities-header p { margin:3px 0 0; color:#ccc; font-size:10px; }
+.sheet-abilities-help { display:flex; flex-direction:column; min-width:260px; padding:7px 9px; border:1px solid #555; background:#202020; }
+.sheet-abilities-help strong { color:#d6b46a; font-size:10px; text-transform:uppercase; letter-spacing:.5px; }
+.sheet-abilities-help span { margin-top:2px; color:#ccc; font-size:9px; }
+.sheet-abilities-panel { margin-top:8px; }
+.sheet-ability-card { margin:7px 8px; border:1px solid #c9c9c9; border-left:4px solid #7b1113; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.06); }
+.sheet-ability-name { width:calc(100% - 16px) !important; height:30px; margin:7px 8px 6px !important; font-size:13px !important; font-weight:bold; }
+.sheet-ability-details { border-top:1px solid #eee; }
+.sheet-ability-details summary { padding:6px 8px; color:#7b1113; font-size:9px; font-weight:bold; cursor:pointer; letter-spacing:.35px; }
+.sheet-ability-details label { display:flex; flex-direction:column; gap:3px; margin:0; padding:0 8px 8px; }
+.sheet-ability-details label span { color:#777; font-size:8px; font-weight:bold; text-transform:uppercase; }
+.sheet-ability-details textarea { width:100%; min-height:72px; margin:0; resize:vertical; line-height:1.35; }
+.sheet-abilities-note { margin-top:8px; padding:8px 10px; border:1px solid #d6c7a5; background:#fffaf0; color:#555; font-size:9px; }
+
+@media (max-width:720px) {
+    .sheet-abilities-header { align-items:stretch; flex-direction:column; }
+    .sheet-abilities-help { min-width:0; }
+}
+
+
+/* =========================================================
+   TURN UNDEAD - v0.8.1
+   ========================================================= */
+
+.sheet-turn-undead {
+    display: grid;
+    grid-template-columns: minmax(190px, 1fr) 82px 62px 62px 78px;
+    gap: 6px;
+    align-items: end;
+    margin-top: 8px;
+    padding: 6px 8px;
+    border: 1px solid #cccccc;
+    border-left: 4px solid #7b1113;
+    background: #ffffff;
+}
+
+.sheet-turn-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 29px;
+}
+
+.sheet-turn-title strong {
+    color: #7b1113;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.sheet-turn-title span {
+    margin-top: 1px;
+    color: #777777;
+    font-size: 8px;
+}
+
+.sheet-turn-undead label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+}
+
+.sheet-turn-undead label span {
+    color: #777777;
+    font-size: 7px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.sheet-turn-undead input {
+    width: 100% !important;
+    margin: 0 !important;
+    text-align: center;
+    font-weight: bold;
+}
+
+.sheet-turn-undead input[readonly] {
+    background: #eeeeee !important;
+    color: #7b1113;
+}
+
+.sheet-turn-button {
+    width: 100% !important;
+    height: 29px;
+    margin: 0 !important;
+    padding: 3px 7px !important;
+    border: 0 !important;
+    border-radius: 3px !important;
+    background: #7b1113 !important;
+    color: #ffffff !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+}
+
+.sheet-turn-button:hover {
+    background: #981518 !important;
+}
+
+
+@media (max-width: 720px) {
+    .sheet-turn-undead {
+        grid-template-columns: minmax(160px, 1fr) 72px 58px 58px;
+    }
+
+    .sheet-turn-button {
+        grid-column: 1 / -1;
+    }
+}
+
+
+/* =========================================================
+   CLASS LOCK + CALCULATED BTH - v0.9
+   ========================================================= */
+
+.sheet-identity .sheet-class-select {
+    width: 100%;
+    min-width: 150px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.sheet-combat-stat input[name="attr_bth"][readonly] {
+    background: #eeeeee !important;
+    color: #7b1113;
+    cursor: default;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   v0.9.1 - HP WIDTH + CRITICAL DAMAGE
+   ========================================================= */
+
+.sheet-hp-stat input {
+    width: 58px;
+    min-width: 58px;
+}
+
+
+
+
+
+
+/* =========================================================
+   RACE + RACIAL ABILITIES - v0.10
+   ========================================================= */
+
+.sheet-identity .sheet-race-select,
+.sheet-identity .sheet-class-select {
+    width: 100%;
+    min-width: 145px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.sheet-ability-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sheet-ability-row .sheet-ability-name {
+    flex: 1 1 auto;
+}
+
+.sheet-ability-source {
+    flex: 0 0 auto;
+    padding: 2px 5px;
+    border: 1px solid #c8b36a;
+    border-radius: 3px;
+    background: #f4ecd0;
+    color: #6f5810;
+    font-size: 8px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   v0.11 - RULES-AWARE ABILITIES + DARK MODE INLINE ROLLS
+   ========================================================= */
+
+.sheet-ability-action {
+    flex: 0 0 auto;
+    min-width: 48px;
+    margin: 0 !important;
+    padding: 2px 6px !important;
+    border: 0 !important;
+    border-radius: 3px !important;
+    background: #7b1113 !important;
+    color: #ffffff !important;
+    font-size: 8px !important;
+    font-weight: bold !important;
+}
+
+/* =========================================================
+   v0.11.1 - RACIAL ACTION FIX
+   ========================================================= */
+
+.sheet-ability-action {
+    min-width: 54px;
+}
+
+
+
+
+/* =========================================================
+   v0.11.3 - BUILD IDENTIFIER
+   ========================================================= */
+
+.sheet-page-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sheet-build-badge {
+    padding: 2px 6px;
+    border: 1px solid #c8b36a;
+    border-radius: 3px;
+    background: #f4ecd0;
+    color: #6f5810;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   v0.12 - CLASS ABILITY ENGINE
+   ========================================================= */
+
+.sheet-abilities-panel .sheet-ability-source {
+    flex: 0 0 auto;
+}
+
+/* v0.13 repair foundation */
+.sheet-repair-button {
+    margin-left: 10px;
+    padding: 4px 8px;
+    border: 1px solid #c8b36a;
+    background: #8f1015;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* =========================================================
+   v0.14 - Racial/Class ability crossover notice
+   ========================================================= */
+.sheet-racial-routing {
+    margin: 2px 0 4px 0;
+    font-size: 11px;
+    line-height: 1.35;
+    color: #6f4c13;
+}
+.sheet-racial-routing-label:not(:empty) {
+    display: block;
+    padding: 5px 7px;
+    border-left: 3px solid #a87820;
+    background: #fff8df;
+    font-weight: 600;
+}
+
+/* =========================================================
+   v0.15 - Visible applied racial/class modifiers
+   ========================================================= */
+.sheet-ability-modifier-summary {
+    margin: 0 0 8px 0;
+    padding: 7px 9px;
+    border-left: 3px solid #8f1015;
+    background: #f6f0df;
+    font-size: 11px;
+    line-height: 1.4;
+}
+.sheet-ability-modifier-summary strong {
+    display: block;
+    margin-bottom: 2px;
+    color: #532a44;
+}
+.sheet-ability-modifier-summary span {
+    display: block;
+}
+
+/* =========================================================
+   v0.16 - TOOLS / CONFIGURATION
+   ========================================================= */
+.sheet-tools-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:12px;
+}
+.sheet-tools-header h1 { margin:0; }
+.sheet-tools-header p { margin:4px 0 0; }
+
+.sheet-tools-note {
+    display:flex;
+    gap:10px;
+    align-items:center;
+    padding:10px 12px;
+    margin-bottom:12px;
+    border-left:4px solid #532a44;
+    background:#f6f0df;
+}
+.sheet-tools-note span { font-size:12px; }
+
+.sheet-tools-panel { margin-bottom:14px; }
+.sheet-tool-check {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:8px 0;
+    font-weight:700;
+}
+.sheet-tool-check input[type="checkbox"] { width:auto; }
+.sheet-tool-help {
+    margin:5px 0 10px;
+    font-size:11px;
+    line-height:1.4;
+    opacity:.8;
+}
+.sheet-target-grid {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(120px,1fr));
+    gap:10px;
+    margin:10px 0;
+}
+.sheet-target-grid label span {
+    display:block;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+}
+.sheet-target-grid input { width:100%; box-sizing:border-box; }
+.sheet-tool-button, .sheet-rebuild-button {
+    padding:6px 10px;
+    font-weight:700;
+    cursor:pointer;
+}
+.sheet-rebuild-button {
+    margin:8px 0;
+    background:#532a44 !important;
+    color:#fff !important;
+}
+.sheet-safe-note {
+    padding:8px 10px;
+    background:#eef4e8;
+    border-left:3px solid #667c48;
+    font-size:11px;
+}
+.sheet-rebuild-status {
+    width:100%;
+    box-sizing:border-box;
+    margin:4px 0 10px;
+    border:0;
+    background:rgba(0,0,0,0);
+    font-size:11px;
+    font-style:italic;
+}
+.sheet-version-grid {
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:3px 12px;
+    max-width:260px;
+    padding-top:8px;
+    border-top:1px solid #ccc;
+    font-size:11px;
+}
+
+/* Tertiary mode: the hidden state is a sibling before the nav/pages. */
+.sheet-tertiary-state[value="0"] ~ .sheet-tabs ~ .sheet-page-core .sheet-prime-select option.sheet-tertiary-option {
+    display:none;
+}
+.sheet-tertiary-state[value="0"] ~ .sheet-tabs ~ .sheet-page-tools .sheet-tertiary-target {
+    display:none;
+}
+
+@media (max-width:700px) {
+    .sheet-target-grid { grid-template-columns:1fr; }
+}
+
+/* =========================================================
+   v0.17 - CORE CLASS PROGRESSION
+   ========================================================= */
+.sheet-class-progression {
+    display:grid;
+    grid-template-columns:repeat(6,minmax(80px,1fr));
+    gap:6px;
+    padding:8px 10px;
+    margin:8px 0 0;
+    background:#f4efe3;
+    border:1px solid #d2c5ad;
+}
+.sheet-progression-stat span {
+    display:block;
+    margin-bottom:2px;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+}
+.sheet-progression-stat input {
+    width:100%;
+    box-sizing:border-box;
+    min-height:26px;
+    font-weight:700;
+}
+.sheet-progression-stat input[readonly] {
+    background:#eee7d9;
+}
+.sheet-class-reference-line {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    padding:5px 10px 8px;
+    margin-bottom:8px;
+    border:1px solid #d2c5ad;
+    border-top:0;
+    background:#faf7ef;
+    font-size:10px;
+}
+.sheet-class-reference-line span {
+    display:flex;
+    align-items:center;
+    gap:4px;
+    min-width:0;
+}
+.sheet-class-reference-line input {
+    flex:1;
+    min-width:0;
+    border:0;
+    background:rgba(0,0,0,0);
+    font-size:10px;
+}
+@media (max-width:800px) {
+    .sheet-class-progression { grid-template-columns:repeat(3,1fr); }
+    .sheet-class-reference-line { grid-template-columns:1fr; }
+}
+
+/* =========================================================
+   v0.18.2 - FIXED CORE ACTIONS & ABILITIES DISPLAY
+   ========================================================= */
+.sheet-core-actions-panel { margin-top:10px; }
+.sheet-core-actions-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    padding:8px;
+}
+.sheet-core-actions-grid h3 { margin:0 0 5px; font-size:11px; text-transform:uppercase; }
+.sheet-core-fixed-row {
+    display:grid;
+    grid-template-columns:44px minmax(100px,1fr) 42px;
+    gap:5px;
+    align-items:center;
+    min-height:27px;
+    border-bottom:1px solid #ddd;
+}
+.sheet-core-fixed-roll { padding:2px 4px !important; font-size:9px !important; font-weight:800; }
+.sheet-core-fixed-name, .sheet-core-fixed-tag {
+    border:0 !important;
+    background:rgba(0,0,0,0) !important;
+    box-shadow:none !important;
+    min-height:20px !important;
+    height:20px !important;
+    padding:0 !important;
+}
+.sheet-core-fixed-name { font-weight:700; font-size:11px; }
+.sheet-core-fixed-tag { font-size:8px; text-align:right; opacity:.65; }
+.sheet-progression-xp-entry input { min-width:72px; }
+@media (max-width:700px) { .sheet-core-actions-grid { grid-template-columns:1fr; } }
+
+/* =========================================================
+   v0.18.3 - fixed Core population / visibility
+   ========================================================= */
+.sheet-core-fixed-row {
+    display:none;
+}
+.sheet-core-fixed-row > .sheet-core-fixed-active[value="1"] ~ .sheet-core-fixed-roll,
+.sheet-core-fixed-row > .sheet-core-fixed-active[value="1"] ~ .sheet-core-fixed-name,
+.sheet-core-fixed-row > .sheet-core-fixed-active[value="1"] ~ .sheet-core-fixed-tag {
+    display:block;
+}
+.sheet-core-fixed-row:has(> .sheet-core-fixed-active[value="1"]) {
+    display:grid;
+}
+
+/* =========================================================
+   v0.18.4 - SMART CORE ABILITY PRESENTATION
+   ========================================================= */
+.sheet-core-fixed-row:has(> .sheet-core-fixed-active[value="1"]) {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:10px;
+    align-items:center;
+    padding:7px 8px;
+    min-height:44px;
+    border-bottom:1px solid #ddd;
+}
+.sheet-core-ability-copy { min-width:0; }
+.sheet-core-ability-heading {
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+.sheet-core-fixed-name {
+    width:auto !important;
+    flex:1 1 auto;
+    font-weight:800 !important;
+    font-size:11px !important;
+}
+.sheet-core-level-badge {
+    flex:0 0 auto;
+    padding:1px 5px;
+    border:1px solid #c6a54a;
+    border-radius:3px;
+    background:#f4ecd2;
+    color:#6d5412;
+    font-size:8px;
+    font-weight:800;
+    white-space:nowrap;
+}
+.sheet-core-fixed-detail {
+    display:block;
+    width:100%;
+    height:30px !important;
+    min-height:30px !important;
+    margin:1px 0 0 !important;
+    padding:0 !important;
+    resize:none;
+    overflow:hidden;
+    border:0 !important;
+    background:rgba(0,0,0,0) !important;
+    box-shadow:none !important;
+    font-size:9px;
+    line-height:1.25;
+    opacity:.78;
+}
+.sheet-core-smart-action {
+    display:none !important;
+    min-width:48px;
+    padding:5px 8px !important;
+    border:1px solid #6f0e13 !important;
+    border-radius:4px !important;
+    background:#8d1117 !important;
+    color:#fff !important;
+    font-size:9px !important;
+    font-weight:900 !important;
+    letter-spacing:.35px;
+    text-transform:uppercase;
+    box-shadow:none !important;
+}
+.sheet-core-fixed-row > .sheet-core-fixed-mode[value="check"] ~ .sheet-core-smart-action,
+.sheet-core-fixed-row > .sheet-core-fixed-mode[value="action"] ~ .sheet-core-smart-action,
+.sheet-core-fixed-row > .sheet-core-fixed-mode[value="attack"] ~ .sheet-core-smart-action,
+.sheet-core-fixed-row > .sheet-core-fixed-mode[value="special"] ~ .sheet-core-smart-action {
+    display:block !important;
+}
+
+
+/* =========================================================
+   v0.18.10 - ROLL ENGINE RECOVERY BASELINE
+   Roll mechanics restored to the known-good v0.18.6 custom
+   template/startRoll/finishRoll implementation.
+   Chat cosmetics intentionally deferred until the engine is
+   re-confirmed. No sheet-layout selectors changed.
+   ========================================================= */
+
+
+/* =========================================================
+   PRODUCTION C&C ROLL CARD CHASSIS
+   Shared presentation for live ability and attack cards.
+   Roll engine, startRoll, finishRoll, and computed fields remain
+   unchanged from the v0.18.10 known-good mechanics baseline.
+   ========================================================= */
+
+.sheet-rolltemplate-ccability2 .sheet-template-container,
+.sheet-rolltemplate-ccattack2 .sheet-template-container {
+    background: #eeeeee !important;
+    border: 1px solid #8b1116 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    color: #222222 !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-header,
+.sheet-rolltemplate-ccattack2 .sheet-template-header {
+    background: #8b1116 !important;
+    color: #ffffff !important;
+    padding: 8px 10px !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-character,
+.sheet-rolltemplate-ccattack2 .sheet-template-character {
+    color: #ffffff !important;
+    font-size: 9px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-title,
+.sheet-rolltemplate-ccattack2 .sheet-template-title {
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    margin-top: 2px !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-subtitle {
+    background: #d2d2d2 !important;
+    color: #333333 !important;
+    border-bottom: 1px solid #b8b8b8 !important;
+    padding: 5px 10px !important;
+    font-size: 9px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-row,
+.sheet-rolltemplate-ccattack2 .sheet-template-row {
+    background: #e8e8e8 !important;
+    color: #222222 !important;
+    border-bottom: 1px solid #c8c8c8 !important;
+    padding: 6px 10px !important;
+    min-height: 14px !important;
+    font-size: 10px !important;
+    overflow: hidden !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-row:nth-of-type(even),
+.sheet-rolltemplate-ccattack2 .sheet-template-row:nth-of-type(even) {
+    background: #dddddd !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-row span,
+.sheet-rolltemplate-ccattack2 .sheet-template-row span {
+    font-weight: bold !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-row strong,
+.sheet-rolltemplate-ccattack2 .sheet-template-row strong {
+    float: right !important;
+    font-weight: bold !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-target,
+.sheet-rolltemplate-ccattack2 .sheet-template-total {
+    background: #cccccc !important;
+    font-weight: bold !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-result,
+.sheet-rolltemplate-ccattack2 .sheet-template-result {
+    background: #8b1116 !important;
+    color: #ffffff !important;
+    padding: 8px 10px !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    overflow: hidden !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-result strong,
+.sheet-rolltemplate-ccattack2 .sheet-template-result strong {
+    float: right !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+}
+
+.sheet-rolltemplate-ccattack2 .sheet-template-critical {
+    background: #8b1116 !important;
+    color: #ffffff !important;
+    padding: 6px 10px !important;
+    text-align: center !important;
+    font-weight: bold !important;
+}
+
+.sheet-rolltemplate-ccattack2 .sheet-template-fumble {
+    background: #444444 !important;
+    color: #ffffff !important;
+    padding: 6px 10px !important;
+    text-align: center !important;
+    font-weight: bold !important;
+}
+
+.sheet-rolltemplate-ccability2 .sheet-template-notes,
+.sheet-rolltemplate-ccattack2 .sheet-template-notes {
+    background: #f4f4f4 !important;
+    color: #444444 !important;
+    border-top: 1px solid #c8c8c8 !important;
+    padding: 7px 10px !important;
+    font-size: 9px !important;
+    line-height: 1.35 !important;
+}
+
+.sheet-rolltemplate-ccability2 .inlinerollresult,
+.sheet-rolltemplate-ccattack2 .inlinerollresult {
+    background: rgba(0,0,0,0) !important;
+    border: 0 !important;
+    padding: 0 2px !important;
+    color: inherit !important;
+    font-weight: bold !important;
+}
+
+
+/* =========================================================
+   v0.18.19 - STABILIZATION / CSS CLEANUP
+   Removed superseded roll-card experiments while preserving
+   the proven production card chassis and frozen roll engine.
+   No character data model or roll arithmetic changes.
+   ========================================================= */
+
+
+/* =========================================================
+   v0.19.0 - COMBAT WORKSPACE FOUNDATION
+   ========================================================= */
+.sheet-combat-page-header {
+    display:flex; justify-content:space-between; align-items:flex-end; gap:14px;
+    padding:12px 14px; background:#292929; color:#fff; border-bottom:4px solid #7b1113;
+}
+.sheet-combat-page-header h1 { margin:0 !important; color:#fff !important; font-size:22px !important; }
+.sheet-combat-page-header p { margin:3px 0 0; color:#ccc; font-size:9px; }
+.sheet-combat-page-vitals { display:flex; align-items:flex-end; gap:6px; }
+.sheet-combat-page-vitals label, .sheet-combat-summary-grid label { display:flex; flex-direction:column; gap:2px; margin:0; }
+.sheet-combat-page-vitals label span, .sheet-combat-summary-grid label span { font-size:7px; font-weight:800; text-transform:uppercase; }
+.sheet-combat-page-vitals input { width:55px !important; height:27px; margin:0 !important; text-align:center; font-weight:800; }
+.sheet-combat-summary-grid { display:grid; grid-template-columns:90px 120px repeat(5,minmax(65px,1fr)); gap:7px; padding:9px; align-items:end; }
+.sheet-combat-summary-grid input { width:100% !important; height:27px; margin:0 !important; text-align:center; font-weight:700; }
+.sheet-combat-init-roll { height:27px; margin:0 !important; background:#7b1113 !important; color:#fff !important; font-weight:800 !important; }
+.sheet-combat-reference-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:#ddd; }
+.sheet-combat-reference-grid > div { display:flex; justify-content:space-between; align-items:center; padding:9px; background:#fff; }
+.sheet-combat-reference-grid span { font-size:8px; font-weight:800; text-transform:uppercase; }
+.sheet-combat-reference-grid input[type="number"] { width:42px !important; margin:0 !important; border:0 !important; background:rgba(0,0,0,0) !important; font-weight:800; text-align:right; }
+.sheet-combat-reference-grid input[type="checkbox"] { margin:0 !important; }
+.sheet-combat-foundation-note, .sheet-combat-footer-note { padding:8px 10px; font-size:9px; line-height:1.35; background:#f4f0e5; }
+.sheet-combat-foundation-note { border-top:1px solid #ddd; }
+.sheet-combat-footer-note { margin-top:8px; border-left:3px solid #7b1113; }
+.sheet-combat-ac-line { display:flex; align-items:center; gap:9px; padding:10px; }
+.sheet-combat-ac-line strong { color:#7b1113; }
+.sheet-combat-ac-line input { width:52px !important; margin:0 !important; text-align:center; font-weight:800; }
+.sheet-combat-ac-line span { font-size:10px; color:#555; }
+@media (max-width:760px) {
+    .sheet-combat-page-header { flex-direction:column; align-items:stretch; }
+    .sheet-combat-page-vitals { flex-wrap:wrap; }
+    .sheet-combat-summary-grid { grid-template-columns:repeat(3,1fr); }
+    .sheet-combat-reference-grid { grid-template-columns:repeat(2,1fr); }
+}
+
+
+/* =========================================================
+   v0.19.1 - NAVIGATION REPAIR
+   Page visibility no longer depends on physical page order.
+   Future pages can be inserted without breaking existing tabs.
+   ========================================================= */
+
+
+/* =========================================================
+   v0.19.2 - AUTHORITATIVE WEAPON WORKSPACE MIGRATION
+   The original repeating weapon section now lives on Combat.
+   No duplicate weapon store is created.
+   ========================================================= */
+.sheet-page-combat > .sheet-panel .sheet-weapon-card {
+    background:#fff;
+}
+.sheet-core-combat-handoff {
+    margin-top:8px;
+    padding:8px 10px;
+    border-left:3px solid #7b1113;
+    background:#f4f0e5;
+    font-size:9px;
+    line-height:1.35;
+}
+
+
+/* =========================================================
+   v0.19.3 - READIED ATTACKS
+   Combat manages weapons; Core surfaces up to four selected rows.
+   ========================================================= */
+.sheet-readied-toggle {
+    display:flex !important;
+    align-items:center;
+    gap:4px;
+    margin:0 4px !important;
+    white-space:nowrap;
+    font-size:8px !important;
+    font-weight:800;
+    text-transform:uppercase;
+}
+.sheet-readied-toggle input { margin:0 !important; }
+
+.sheet-readied-list { background:#fff; }
+.sheet-readied-row {
+    display:none;
+    grid-template-columns:minmax(180px,1fr) 60px 95px 74px;
+    gap:8px;
+    align-items:center;
+    padding:7px 9px;
+    border-bottom:1px solid #ddd;
+}
+.sheet-readied-row:has(input[value="1"]) { display:grid; }
+.sheet-readied-name { font-weight:800; font-size:11px; }
+.sheet-readied-attack { color:#7b1113; font-size:13px; font-weight:900; text-align:center; }
+.sheet-readied-damage { font-weight:800; text-align:center; }
+.sheet-readied-row .sheet-attack-button { margin:0 !important; }
+
+.sheet-core-readied-panel:has(.sheet-readied-row input[value="1"]) .sheet-readied-empty { display:none; }
+.sheet-readied-empty {
+    padding:9px;
+    background:#f4f0e5;
+    font-size:9px;
+}
+@media (max-width:760px) {
+    .sheet-readied-row { grid-template-columns:minmax(120px,1fr) 48px 75px 68px; }
+}
+
+
+/* =========================================================
+   v0.19.4 - WEAPON ROW ALIGNMENT
+   ATTACK anchors the left edge; READIED is configuration at right.
+   ========================================================= */
+.sheet-weapon-main .sheet-readied-toggle {
+    justify-content: center;
+    align-self: center;
+}
+
+/* =========================================================
+   v0.20.1 - MEMORIZED SPELLS
+   ========================================================= */
+.sheet-spell-memorized-toggle {
+    display:flex; align-items:center; justify-content:center; gap:4px;
+    margin:0; color:#555; font-size:8px; font-weight:bold;
+    text-transform:uppercase; white-space:nowrap;
+}
+.sheet-spell-memorized-toggle input {
+    width:auto !important; height:auto !important; margin:0 !important;
+}
+.sheet-core-spells-panel { margin-top:8px; }
+.sheet-core-spell-list { display:grid; gap:4px; padding:7px 8px 8px; }
+.sheet-core-spell-slot {
+    display:none;
+    grid-template-columns:42px minmax(140px,1fr) 64px;
+    gap:6px; align-items:center; min-height:30px; padding:3px 5px;
+    border:1px solid #d2d2d2; border-left:4px solid #7b1113; background:#f8f8f8;
+}
+.sheet-core-spell-slot:has(input[name$="_active"][value="1"]) { display:grid; }
+.sheet-core-spell-level { color:#7b1113; font-size:9px; font-weight:bold; text-align:center; }
+.sheet-core-spell-level:not(:empty)::before { content:"LV "; color:#777; font-size:8px; }
+.sheet-core-spell-name {
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    color:#2b2b2b; font-size:11px; font-weight:bold;
+}
+.sheet-core-cast-button {
+    height:25px !important; margin:0 !important; padding:0 8px !important;
+    border:1px solid #5d0d0f !important; background:#7b1113 !important;
+    color:#fff !important; font-size:9px !important; font-weight:bold !important;
+}
+
+
+/* =========================================================
+   v0.20.1 - SPELL CHAT PUNCTUATION
+   Presentation only: label/value grammar.
+   ========================================================= */
+.sheet-rolltemplate-ccspell .sheet-rt-row > span:first-child::after {
+    content: ":";
+}
+.sheet-rolltemplate-ccspell .sheet-rt-row > span:first-child {
+    margin-right: 4px;
+}
+
+
+/* =========================================================
+   v0.20.1 - CORE ABILITY FOCUS FIX
+   Core ability name/detail fields are display-only.
+   ROLL buttons remain normal interactive controls.
+   ========================================================= */
+.sheet-core-fixed-name,
+.sheet-core-fixed-detail {
+    pointer-events: none;
+    cursor: default;
+}
+
+.sheet-core-smart-action {
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   v0.21.0 - CORE SPELL SLOT TRACKER PROTOTYPE
+   ========================================================= */
+
+.sheet-core-spell-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(190px, 2fr);
+    gap: 8px;
+    align-items: start;
+    padding: 7px 8px 8px;
+}
+
+.sheet-core-spell-workspace .sheet-core-spell-list {
+    padding: 0;
+}
+
+.sheet-spell-day-tracker {
+    border: 1px solid #cccccc;
+    background: #ffffff;
+}
+
+.sheet-spell-day-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 30px;
+    padding: 4px 7px;
+    background: #eeeeee;
+    border-bottom: 1px solid #cccccc;
+    color: #7b1113;
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.sheet-spell-restore {
+    height: 22px !important;
+    margin: 0 !important;
+    padding: 0 7px !important;
+    border: 1px solid #5d0d0f !important;
+    border-radius: 0 !important;
+    background: #7b1113 !important;
+    color: #ffffff !important;
+    font-size: 8px !important;
+    font-weight: bold !important;
+}
+
+.sheet-spell-day-row {
+    display: grid;
+    grid-template-columns: 38px 45px 10px 45px;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    min-height: 29px;
+    padding: 3px 5px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.sheet-spell-day-row:last-child {
+    border-bottom: 0;
+}
+
+.sheet-spell-day-row > span:first-child {
+    color: #7b1113;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.sheet-spell-day-row input[type="number"] {
+    width: 45px !important;
+    min-width: 0;
+    height: 23px;
+    margin: 0 !important;
+    padding: 1px 3px !important;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.sheet-spell-day-slash {
+    text-align: center;
+    color: #777777;
+    font-weight: bold;
+}
+
+@media (max-width: 700px) {
+    .sheet-core-spell-workspace {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   v0.21.1 - AUTOMATIC SPELLS PER DAY
+   ========================================================= */
+
+.sheet-spell-day-row input[readonly] {
+    background: #eeeeee !important;
+    color: #333333;
+    cursor: default;
+}
+
+.sheet-spell-resource-panel {
+    margin-bottom: 10px;
+}
+
+.sheet-spell-resource-summary {
+    padding: 7px 10px;
+    border-bottom: 1px solid #dddddd;
+    background: #f7f7f7;
+    font-size: 10px;
+}
+
+.sheet-spell-resource-summary strong {
+    color: #7b1113;
+}
+
+.sheet-spell-breakdown {
+    padding: 6px 8px 8px;
+}
+
+.sheet-spell-breakdown-row {
+    display: grid;
+    grid-template-columns: 34px 28px 42px 12px 34px 42px 12px 42px 38px 58px 46px;
+    align-items: center;
+    justify-content: start;
+    gap: 4px;
+    min-height: 30px;
+    border-bottom: 1px solid #e2e2e2;
+    font-size: 9px;
+}
+
+.sheet-spell-breakdown-row:last-child {
+    border-bottom: 0;
+}
+
+.sheet-spell-breakdown-level {
+    color: #7b1113;
+    font-weight: bold;
+}
+
+.sheet-spell-breakdown-row input[type="number"] {
+    width: 42px !important;
+    height: 23px;
+    margin: 0 !important;
+    padding: 1px 3px !important;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.sheet-spell-breakdown-row input[readonly] {
+    background: #eeeeee !important;
+    color: #333333;
+}
+
+.sheet-spell-breakdown-remaining-label {
+    text-align: right;
+    font-weight: bold;
+}
+
+@media (max-width: 700px) {
+    .sheet-spell-breakdown-row {
+        grid-template-columns: 34px 28px 42px 12px 34px 42px 12px 42px 38px;
+    }
+
+    .sheet-spell-breakdown-remaining-label {
+        grid-column: 2 / span 3;
+        text-align: left;
+    }
+}
+
+
+/* =========================================================
+   v0.21.2 - CASTER TRANSITION STATE FIX
+   No visual changes. Spell resource ownership is tracked by
+   casting class so a class switch initializes the new pool.
+   ========================================================= */
+
+
+/* =========================================================
+   v0.21.3 - CORE CASTER BATTLE SPACE
+   Compact live casting context on the Memorized Spells bar.
+   ========================================================= */
+
+.sheet-caster-battle-title {
+    gap: 12px;
+}
+
+.sheet-caster-battle-space {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-left: auto;
+    text-align: right;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: .15px;
+    text-transform: uppercase;
+}
+
+.sheet-caster-battle-class,
+.sheet-caster-save-cl {
+    font-weight: bold;
+}
+
+.sheet-caster-battle-sep {
+    opacity: .65;
+}
+
+@media (max-width: 760px) {
+    .sheet-caster-battle-title {
+        align-items: flex-start;
+    }
+
+    .sheet-caster-battle-space {
+        max-width: 68%;
+        line-height: 1.35;
+    }
+}
+
+
+/* =========================================================
+   v0.21.4 - CORE COMBAT BATTLE SPACE
+   Live combat context on the Readied Attacks bar.
+   ========================================================= */
+
+.sheet-combat-battle-title {
+    gap: 12px;
+}
+
+.sheet-combat-battle-space {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-left: auto;
+    text-align: right;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: .15px;
+    text-transform: uppercase;
+}
+
+.sheet-combat-battle-class {
+    font-weight: bold;
+}
+
+.sheet-combat-battle-sep {
+    opacity: .65;
+}
+
+.sheet-combat-space-is-fighter[value="0"] ~ .sheet-core-readied-panel .sheet-combat-battle-fighter {
+    display: none;
+}
+
+.sheet-combat-space-has-dominance[value="0"] ~ .sheet-core-readied-panel .sheet-combat-dominance {
+    display: none;
+}
+
+@media (max-width: 760px) {
+    .sheet-combat-battle-title {
+        align-items: flex-start;
+    }
+
+    .sheet-combat-battle-space {
+        max-width: 68%;
+        line-height: 1.35;
+    }
+}
+
+
+/* =========================================================
+   v0.21.5 - TOOLS DASHBOARD + ATTRIBUTE GENERATOR
+   Layout / utility only. Existing combat, spell and ability
+   roll mechanics are unchanged.
+   ========================================================= */
+
+.sheet-tools-dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+
+.sheet-tools-dashboard .sheet-tools-panel {
+    margin: 0 !important;
+    min-width: 0;
+}
+
+.sheet-statgen-open-button {
+    width: 100%;
+}
+
+/* ---------- Attribute Generator modal ---------- */
+
+.sheet-statgen-state {
+    display: none !important;
+}
+
+.sheet-statgen-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    box-sizing: border-box;
+    background: rgba(0,0,0,.62);
+}
+
+.sheet-statgen-state[value="1"] + .sheet-statgen-modal {
+    display: flex;
+}
+
+.sheet-statgen-dialog {
+    width: 520px;
+    max-width: 96%;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid #6f0e13;
+    border-radius: 5px;
+    background: #f5f5f5;
+    box-shadow: 0 12px 36px rgba(0,0,0,.45);
+}
+
+.sheet-statgen-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 13px;
+    border-bottom: 4px solid #7b1113;
+    background: #292929;
+    color: #fff;
+}
+
+.sheet-statgen-header h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 18px;
+}
+
+.sheet-statgen-close {
+    width: 32px;
+    height: 32px;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-size: 24px !important;
+    font-weight: 400 !important;
+    line-height: 30px !important;
+    box-shadow: none !important;
+}
+
+.sheet-statgen-body {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(110px, 1fr);
+    gap: 12px;
+    padding: 14px;
+}
+
+.sheet-statgen-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+}
+
+.sheet-statgen-field > span {
+    color: #555;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.sheet-statgen-field select {
+    width: 100%;
+    height: 31px;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+.sheet-statgen-note {
+    grid-column: 1 / -1;
+    padding: 8px 10px;
+    border-left: 3px solid #7b1113;
+    background: #f4f0e5;
+    color: #555;
+    font-size: 9px;
+    line-height: 1.35;
+}
+
+.sheet-statgen-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 10px 14px 14px;
+}
+
+.sheet-statgen-actions button {
+    margin: 0 !important;
+}
+
+/* ---------- Attribute Generator chat card ---------- */
+
+.sheet-rolltemplate-ccstats .sheet-stat-card {
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #8b1116;
+    background: #eeeeee;
+    color: #222;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.sheet-rolltemplate-ccstats .sheet-stat-card-header {
+    padding: 8px 10px;
+    background: #8b1116;
+    color: #fff;
+}
+
+.sheet-rolltemplate-ccstats .sheet-stat-card-character {
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.sheet-rolltemplate-ccstats .sheet-stat-card-title {
+    margin-top: 2px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.sheet-rolltemplate-ccstats .sheet-stat-card-method,
+.sheet-rolltemplate-ccstats .sheet-stat-card-setlabel {
+    padding: 5px 10px;
+    border-bottom: 1px solid #b8b8b8;
+    background: #d2d2d2;
+    color: #333;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.sheet-rolltemplate-ccstats .sheet-stat-card-setlabel {
+    background: #e4e4e4;
+}
+
+.sheet-rolltemplate-ccstats .sheet-stat-score-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: #c8c8c8;
+}
+
+.sheet-rolltemplate-ccstats .sheet-stat-score-grid > span {
+    padding: 9px 3px;
+    background: #eeeeee;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.sheet-rolltemplate-ccstats .inlinerollresult {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: inherit !important;
+    font-weight: 900 !important;
+}
+
+@media (max-width: 700px) {
+    .sheet-tools-dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .sheet-statgen-body {
+        grid-template-columns: 1fr;
+    }
+
+    .sheet-statgen-note {
+        grid-column: 1;
+    }
+
+    .sheet-statgen-actions {
+        flex-direction: column-reverse;
+    }
+
+    .sheet-statgen-actions button {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   v0.21.6 - TOOLS LAYOUT POLISH
+   Presentation only. No mechanics changed.
+   ========================================================= */
+
+.sheet-page-tools .sheet-tools-header {
+    margin-bottom: 14px;
+}
+
+.sheet-page-tools .sheet-tools-dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+    row-gap: 16px;
+    align-items: stretch;
+}
+
+.sheet-page-tools .sheet-tools-panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0 12px 12px !important;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.sheet-page-tools .sheet-tools-panel > .sheet-section-title {
+    margin: 0 -12px 12px !important;
+}
+
+.sheet-page-tools .sheet-tools-panel > .sheet-tool-help {
+    margin: 0 0 12px !important;
+    line-height: 1.4;
+}
+
+.sheet-page-tools .sheet-tool-check {
+    margin: 0 0 10px !important;
+    line-height: 1.25;
+}
+
+.sheet-page-tools .sheet-target-grid {
+    gap: 12px;
+    margin: 2px 0 14px !important;
+}
+
+.sheet-page-tools .sheet-target-grid label {
+    min-width: 0;
+}
+
+.sheet-page-tools .sheet-target-grid label > span {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.sheet-page-tools .sheet-target-grid input {
+    margin: 0 !important;
+}
+
+.sheet-page-tools .sheet-tool-button,
+.sheet-page-tools .sheet-rebuild-button {
+    min-height: 34px;
+    margin-top: auto !important;
+    box-sizing: border-box;
+}
+
+.sheet-page-tools .sheet-statgen-open-button {
+    width: 100%;
+}
+
+.sheet-page-tools .sheet-maintenance-panel .sheet-rebuild-button {
+    align-self: flex-start;
+    margin-top: 2px !important;
+}
+
+.sheet-page-tools .sheet-rebuild-status {
+    display: block;
+    width: 100% !important;
+    max-width: 100%;
+    min-width: 0;
+    margin: 10px 0 8px !important;
+    padding: 5px 7px !important;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sheet-page-tools .sheet-version-grid {
+    width: 100%;
+    margin-top: auto;
+    padding-top: 7px;
+    box-sizing: border-box;
+}
+
+.sheet-page-tools .sheet-version-grid span,
+.sheet-page-tools .sheet-version-grid strong {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.sheet-page-tools .sheet-statgen-panel .sheet-tool-help {
+    max-width: 95%;
+}
+
+@media (max-width: 700px) {
+    .sheet-page-tools .sheet-tools-dashboard {
+        grid-template-columns: 1fr;
+        row-gap: 14px;
+    }
+
+    .sheet-page-tools .sheet-tools-panel {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+}
+\n\n/* =========================================================\n   v0.21.7 — CLASS STRUCTURE FOUNDATION + HELP\n   Presentation only. Class-combination mechanics are not active.\n   ========================================================= */\n\n.sheet-page-classes .sheet-class-structure-block {\n    display: flex;\n    flex-direction: column;\n    gap: 8px;\n}\n\n.sheet-page-classes .sheet-class-structure-field {\n    display: grid;\n    grid-template-columns: minmax(110px, 0.8fr) minmax(180px, 1.2fr);\n    gap: 10px;\n    align-items: center;\n    font-weight: 700;\n}\n\n.sheet-page-classes .sheet-class-structure-field select,\n.sheet-page-classes .sheet-dual-class-grid select,\n.sheet-page-classes .sheet-dual-class-grid input {\n    width: 100%;\n    min-width: 0;\n}\n\n.sheet-page-classes .sheet-class-structure-help {\n    margin-bottom: 2px;\n}\n\n.sheet-page-classes .sheet-dual-class-setup {\n    display: none;\n    margin-top: 4px;\n    padding: 10px;\n    border: 1px solid #c8c8c8;\n    border-radius: 4px;\n    background: #f7f7f7;\n}\n\n.sheet-page-classes .sheet-class-structure-state[value="dual"] ~ .sheet-dual-class-setup {\n    display: block;\n}\n\n.sheet-page-classes .sheet-dual-class-heading {\n    display: flex;\n    justify-content: space-between;\n    gap: 8px;\n    align-items: center;\n    margin-bottom: 6px;\n    font-weight: 800;\n    text-transform: uppercase;\n}\n\n.sheet-page-classes .sheet-dual-class-heading span {\n    font-size: 10px;\n    font-weight: 700;\n    letter-spacing: .04em;\n    color: #666;\n}\n\n.sheet-page-classes .sheet-dual-class-grid {\n    display: grid;\n    grid-template-columns: minmax(0, 1.5fr) minmax(100px, .5fr);\n    gap: 10px;\n    margin-top: 8px;\n}\n\n.sheet-page-classes .sheet-dual-class-grid label {\n    display: flex;\n    flex-direction: column;\n    gap: 4px;\n    font-weight: 700;\n}\n\n.sheet-page-classes .sheet-dual-class-preview {\n    margin-top: 9px;\n    padding-top: 8px;\n    border-top: 1px solid #d7d7d7;\n    font-size: 10px;\n    font-weight: 800;\n    letter-spacing: .03em;\n    color: #666;\n}\n\n.sheet-page-tools .sheet-character-creation-divider {\n    height: 1px;\n    margin: 12px 0 2px;\n    background: #d7d7d7;\n}\n\n.sheet-page-help {\n    padding-bottom: 24px;\n}\n\n.sheet-page-help .sheet-help-header {\n    margin-bottom: 14px;\n}\n\n.sheet-page-help .sheet-help-header h1 {\n    margin: 0;\n}\n\n.sheet-page-help .sheet-help-header p {\n    margin: 4px 0 0;\n}\n\n.sheet-page-help .sheet-help-panel {\n    margin-bottom: 10px;\n    padding: 0;\n    overflow: hidden;\n}\n\n.sheet-page-help .sheet-help-toggle {\n    position: absolute;\n    opacity: 0;\n    pointer-events: none;\n}\n\n.sheet-page-help .sheet-help-summary {\n    display: block;\n    margin: 0;\n    padding: 11px 14px;\n    cursor: pointer;\n    font-weight: 800;\n    background: #efefef;\n    border-bottom: 1px solid transparent;\n}\n\n.sheet-page-help .sheet-help-summary::before {\n    content: "▸";\n    display: inline-block;\n    width: 18px;\n}\n\n.sheet-page-help .sheet-help-toggle:checked + .sheet-help-summary {\n    border-bottom-color: #d3d3d3;\n}\n\n.sheet-page-help .sheet-help-toggle:checked + .sheet-help-summary::before {\n    content: "▾";\n}\n\n.sheet-page-help .sheet-help-content {\n    display: none;\n    padding: 12px 14px 14px;\n    line-height: 1.45;\n}\n\n.sheet-page-help .sheet-help-toggle:checked + .sheet-help-summary + .sheet-help-content {\n    display: block;\n}\n\n.sheet-page-help .sheet-help-content p {\n    margin: 0 0 9px;\n}\n\n.sheet-page-help .sheet-help-content p:last-child {\n    margin-bottom: 0;\n}\n\n.sheet-page-help .sheet-help-footer {\n    margin-top: 14px;\n    font-size: 11px;\n    color: #666;\n    text-align: right;\n}\n\n@media (max-width: 700px) {\n    .sheet-page-classes .sheet-class-structure-field,\n    .sheet-page-classes .sheet-dual-class-grid {\n        grid-template-columns: 1fr;\n    }\n}\n
+
+/* =========================================================
+   v0.21.8 — DUAL CLASS FOUNDATION
+   Multi-Class is reserved; no class-combination math is active.
+   ========================================================= */
+.sheet-page-classes .sheet-multi-class-setup {
+    display: none;
+    margin-top: 4px;
+    padding: 10px;
+    border: 1px solid #c8c8c8;
+    border-radius: 4px;
+    background: #f7f7f7;
+}
+
+.sheet-page-classes .sheet-class-structure-state[value="multi"] ~ .sheet-multi-class-setup {
+    display: block;
+}
+
+.sheet-page-classes .sheet-dual-class-grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(130px, .9fr) minmax(100px, .55fr);
+}
+
+
+
+/* v0.21.9 — Dual Class derived rules context */
+.sheet-page-classes .sheet-dual-class-derived {
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px solid #cfcfcf;
+}
+
+.sheet-page-classes .sheet-dual-class-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.sheet-page-classes .sheet-dual-class-facts > div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sheet-page-classes .sheet-dual-class-facts span {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #555;
+}
+
+.sheet-page-classes .sheet-dual-class-facts input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    font-weight: 700;
+    background: #fff;
+}
+
+.sheet-page-classes .sheet-dual-rule-note {
+    margin-top: 8px;
+    padding: 7px 9px;
+    border-left: 3px solid #777;
+    background: #fff;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+@media (max-width: 700px) {
+    .sheet-page-classes .sheet-dual-class-facts {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sheet-page-classes .sheet-dual-class-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   v0.21.10 — FIRST LAYOUT CONSOLIDATION
+   ========================================================= */
+
+/* Core ability rows: reclaim vertical space without reducing legibility. */
+.sheet-core-fixed-row:has(> .sheet-core-fixed-active[value="1"]) {
+    padding: 3px 8px;
+    min-height: 36px;
+}
+.sheet-core-fixed-detail {
+    height: 22px !important;
+    min-height: 22px !important;
+    line-height: 1.15;
+}
+
+/* Classes is now the authoritative character-structure workspace. */
+.sheet-page-classes {
+    padding-bottom: 16px;
+}
+.sheet-classes-header {
+    margin-bottom: 10px;
+}
+.sheet-classes-header h1 {
+    margin: 0;
+}
+.sheet-classes-header p {
+    margin: 3px 0 0;
+}
+.sheet-page-classes .sheet-panel {
+    margin-bottom: 10px;
+}
+.sheet-classes-identity-grid {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) minmax(160px, 1fr) 110px;
+    gap: 10px;
+    padding: 10px;
+}
+.sheet-classes-identity-grid label,
+.sheet-character-details-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.sheet-classes-identity-grid label > span,
+.sheet-character-details-grid label > span {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #555;
+}
+.sheet-classes-identity-grid select,
+.sheet-classes-identity-grid input,
+.sheet-character-details-grid input,
+.sheet-character-details-grid textarea {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+.sheet-character-details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px 10px;
+    padding: 10px;
+}
+.sheet-character-appearance {
+    grid-column: 1 / -1;
+}
+.sheet-character-appearance textarea {
+    min-height: 54px;
+    resize: vertical;
+}
+
+/* Reuse the established progression presentation inside Classes. */
+.sheet-page-classes .sheet-class-progression {
+    margin: 0 10px;
+}
+.sheet-page-classes .sheet-class-reference-line {
+    margin: 0 10px 10px;
+}
+
+/* Dual Class facts: one compact desktop row with the familiar boxed values. */
+.sheet-page-classes .sheet-dual-class-facts {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+}
+.sheet-page-classes .sheet-dual-class-facts > div {
+    gap: 2px;
+}
+.sheet-page-classes .sheet-dual-class-facts span {
+    font-size: 8px;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+.sheet-page-classes .sheet-dual-class-facts input {
+    height: 28px;
+    padding: 3px 6px;
+    border: 1px solid #c9c9c9;
+    border-radius: 3px;
+    background: #fff;
+    font-weight: 700;
+}
+
+/* Persistent footer: support material stays available without occupying a tab. */
+.sheet-project-footer {
+    margin-top: 10px;
+    border-top: 3px solid #7b1113;
+    background: #f3f0e8;
+    color: #333;
+}
+.sheet-footer-help-toggle {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.sheet-footer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 7px 10px 4px;
+    font-size: 10px;
+}
+.sheet-footer-help-link {
+    cursor: pointer;
+    color: #7b1113;
+    font-weight: 800;
+    text-decoration: underline;
+}
+.sheet-footer-help-content {
+    display: none;
+    padding: 10px;
+    border-top: 1px solid #d2cdc1;
+    background: #fff;
+}
+.sheet-footer-help-toggle:checked ~ .sheet-footer-help-content {
+    display: block;
+}
+.sheet-project-footer .sheet-help-header {
+    margin-bottom: 10px;
+}
+.sheet-project-footer .sheet-help-header h2 {
+    margin: 0;
+}
+.sheet-project-footer .sheet-help-header p {
+    margin: 3px 0 0;
+}
+.sheet-project-footer .sheet-help-panel {
+    margin-bottom: 7px;
+    padding: 0;
+    overflow: hidden;
+}
+.sheet-project-footer .sheet-help-toggle {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.sheet-project-footer .sheet-help-summary {
+    display: block;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-weight: 800;
+    background: #efefef;
+}
+.sheet-project-footer .sheet-help-summary::before {
+    content: "▸";
+    display: inline-block;
+    width: 16px;
+}
+.sheet-project-footer .sheet-help-toggle:checked + .sheet-help-summary::before {
+    content: "▾";
+}
+.sheet-project-footer .sheet-help-content {
+    display: none;
+    padding: 9px 10px 10px;
+    line-height: 1.4;
+}
+.sheet-project-footer .sheet-help-toggle:checked + .sheet-help-summary + .sheet-help-content {
+    display: block;
+}
+.sheet-project-footer .sheet-help-content p {
+    margin: 0 0 7px;
+}
+.sheet-footer-legal {
+    padding: 0 12px 8px;
+    font-size: 9px;
+    line-height: 1.35;
+    text-align: center;
+    color: #666;
+}
+
+@media (max-width: 900px) {
+    .sheet-page-classes .sheet-dual-class-facts {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+@media (max-width: 700px) {
+    .sheet-classes-identity-grid,
+    .sheet-character-details-grid {
+        grid-template-columns: 1fr;
+    }
+    .sheet-character-appearance {
+        grid-column: auto;
+    }
+    .sheet-page-classes .sheet-dual-class-facts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   v0.21.11 — COMPACT TURN / INVENTORY AC / CLASSES ORDER
+   ========================================================= */
+
+.sheet-turn-inline {
+    display: flex;
+    align-items: center;
+}
+.sheet-turn-inline .sheet-turn-available[value="0"] + .sheet-turn-inline-button {
+    display: none;
+}
+.sheet-turn-inline .sheet-turn-available[value="1"] + .sheet-turn-inline-button {
+    display: inline-flex;
+}
+.sheet-turn-inline-button {
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    height: 28px;
+    margin: 0;
+    padding: 0 9px;
+    white-space: nowrap;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.sheet-inventory-ac-panel {
+    margin-bottom: 10px;
+}
+.sheet-inventory-ac-formula {
+    padding: 9px 10px 7px;
+}
+.sheet-inventory-ac-formula .sheet-ac-part {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    vertical-align: middle;
+}
+.sheet-inventory-ac-formula .sheet-ac-part > span {
+    display: block;
+    font-size: 8px;
+    line-height: 1;
+    text-transform: uppercase;
+}
+.sheet-inventory-ac-formula .sheet-ac-plus,
+.sheet-inventory-ac-formula .sheet-ac-equals {
+    align-self: flex-end;
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   v0.21.12 — TURN UNDEAD ROLL REPAIR
+   ========================================================= */
+.sheet-turn-inline {
+    gap: 5px;
+}
+.sheet-turn-inline-label {
+    display: none;
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.sheet-turn-inline .sheet-turn-available[value="1"] ~ .sheet-turn-inline-label {
+    display: inline;
+}
+
+/* v0.21.13: Dual Class original-level HP advancement is worker-only; no layout changes. */
+
+/* v0.21.14 — Dual Class dX/Y HP progression: roll through 10th; fixed /Y at 11+. */
+
+/* v0.21.15 — Dual Class generated abilities carry owning class + level; audited Barbarian ability metadata. */
+
+/* v0.21.16 — Class ability checks use owning-class level; corrected audited Druid check/level metadata. */
+
+
+/* =========================================================
+   v0.21.17 - ABILITIES UX / EXECUTION CONTROLS
+   Compact rows + honest execution labels.
+   ========================================================= */
+
+.sheet-abilities-panel .sheet-ability-card {
+    margin: 4px 6px;
+    box-shadow: none;
+}
+
+.sheet-abilities-panel .sheet-ability-row {
+    gap: 5px;
+    min-height: 32px;
+    padding: 4px 6px;
+}
+
+.sheet-abilities-panel .sheet-ability-row .sheet-ability-name {
+    height: 26px;
+    margin: 0 !important;
+    padding: 3px 6px !important;
+    font-size: 12px !important;
+}
+
+.sheet-ability-behavior {
+    flex: 0 0 auto;
+    min-width: 44px;
+    padding: 2px 5px;
+    border: 1px solid #b9b9b9;
+    border-radius: 3px;
+    background: #f2f2f2;
+    color: #4a4a4a;
+    font-size: 7px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.sheet-abilities-panel .sheet-ability-action {
+    min-width: 46px;
+    padding: 3px 6px !important;
+    font-size: 8px !important;
+}
+
+.sheet-abilities-panel .sheet-ability-details summary {
+    padding: 4px 7px;
+    font-size: 8px;
+}
+
+.sheet-abilities-panel .sheet-ability-modifier-summary {
+    margin: 0 7px 6px;
+    padding: 5px 7px;
+    font-size: 10px;
+}
+
+.sheet-abilities-panel .sheet-ability-details label {
+    padding: 0 7px 7px;
+}
+
+@media (max-width:720px) {
+    .sheet-abilities-panel .sheet-ability-row {
+        flex-wrap: wrap;
+    }
+
+    .sheet-abilities-panel .sheet-ability-row .sheet-ability-name {
+        flex: 1 1 calc(100% - 130px);
+        min-width: 180px;
+    }
+}
