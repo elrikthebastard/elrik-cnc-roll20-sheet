@@ -1,6 +1,6 @@
 /* =========================================================
    C&C ROLL20 CHARACTER SHEET
-   VERSION: 0.21.54.23.31
+   VERSION: 0.21.54.23.45
    BASE: 0.17.2
    STATUS: TEST BUILD
    BUILD: Submission Copy Cleanup
@@ -124,16 +124,17 @@
 }
 
 .sheet-tab-button {
-    min-width: 105px;
+    flex: 1 1 auto;
+    min-width: 0;
     height: 32px;
     margin: 0 !important;
-    padding: 5px 14px !important;
+    padding: 5px 8px !important;
     border: 0 !important;
     border-right: 1px solid #555555 !important;
     border-radius: 0 !important;
     background: #1f1f1f !important;
     color: #cccccc !important;
-    font-size: 10px !important;
+    font-size: 9px !important;
     font-weight: bold !important;
     letter-spacing: .7px;
     cursor: pointer;
@@ -8730,7 +8731,7 @@
     /* Flat dark background. */
     background-image:none !important;
 
-    
+
 
     scrollbar-color: #5b5b61 var(--gom-bg);
 }
@@ -9647,7 +9648,7 @@
 /* ============================================================
    END GAMEONMAGILL PERMANENT DARK SELJUK THEME
    ============================================================ */
-   
+
 /* ============================================================
    DARK SELJUK — COMBAT ATTACK REFERENCE FIX
    Tested-target selectors only.
@@ -10715,3 +10716,270 @@
 .sheet-custom-ability-controls label { flex: 1; min-width: 110px; }
 .sheet-ability-origin[value="class:auto"] ~ .sheet-ability-details .sheet-custom-ability-controls,
 .sheet-ability-origin[value="race:auto"] ~ .sheet-ability-details .sheet-custom-ability-controls { display: none; }
+
+/* .33 Advantages: reuse sheet colours and keep effect controls responsive. */
+.sheet-advantage-enable {display:flex;gap:8px;align-items:center;margin:8px 0;font-size:11px;}
+.sheet-advantage-effects {margin:10px 0;padding:10px;border:1px solid #777;border-radius:4px;}
+.sheet-advantage-effects p,.sheet-advantage-movement p {font-size:12px;line-height:1.5;}
+.sheet-advantage-effect {margin:8px 0;border-top:1px solid #777;padding:8px 0;}
+.sheet-advantage-effect summary {cursor:pointer;font-weight:bold;}
+.sheet-advantage-effect-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0;}
+.sheet-advantage-effect-grid label {display:flex;flex-direction:column;gap:4px;min-width:0;}
+.sheet-advantage-effect-grid label span {font-size:11px;}
+.sheet-advantage-effect-grid input,.sheet-advantage-effect-grid select {width:100%;box-sizing:border-box;min-width:0;}
+.sheet-advantage-wide {grid-column:1/-1;}
+.sheet-advantage-effect-grid:has(select[name$="_kind"] option[value="movement"]:checked) .sheet-advantage-combat-field {display:none;}
+.sheet-advantage-warning {font-weight:bold;}
+.sheet-advantage-warning:empty {display:none;}
+@media (max-width:600px) {.sheet-advantage-effect-grid {grid-template-columns:minmax(0,1fr);}}
+
+/* .34 Guided advantage choices and paged weapon buttons. */
+.sheet-advantage-guided {margin:10px 0;padding:10px;border:1px solid #777;border-radius:4px;}
+.sheet-advantage-guided>label {display:flex;flex-direction:column;gap:6px;}
+.sheet-advantage-guided select {width:100%;box-sizing:border-box;}
+.sheet-named-summary {line-height:1.5;font-size:13px;}
+.sheet-named-hunter,.sheet-named-master {display:none;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="orc_hunter"]:checked) .sheet-named-hunter {display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="weapon_master"]:checked) .sheet-named-master {display:block;}
+.sheet-named-picker-state[value="0"]+.sheet-named-picker {display:none;}
+.sheet-named-weapon-option {margin:6px 0;}
+.sheet-named-weapon-option input[value="0"]+button {display:none;}
+.sheet-named-weapon-option button {width:100%;text-align:left;white-space:normal;}
+.sheet-named-picker-pages {display:flex;gap:10px;margin:8px 0;}
+.sheet-named-master>button {padding:8px 12px;}
+.sheet-named-master button {background:#861217;color:#fff;border:1px solid #a84c50;border-radius:3px;padding:6px 10px;cursor:pointer;}
+.sheet-named-master button:hover {background:#9d171d;}
+.sheet-ability-card:has(.sheet-advantage-guided)>.sheet-ability-details>summary {font-size:12px;padding:8px 0;}
+.sheet-named-notes {margin:10px 0;}
+.sheet-named-notes label {display:flex;flex-direction:column;gap:5px;margin:8px 0;}
+.sheet-named-notes input,.sheet-named-notes textarea {width:100%;box-sizing:border-box;}
+.sheet-named-notes textarea {min-height:75px;height:90px;}
+.sheet-advantage-movement {margin:12px 0;padding:10px;}
+.sheet-advantage-movement>summary,.sheet-named-notes>summary {cursor:pointer;font-weight:bold;}
+
+/* .36 Heritage choices and attribute-bound summaries. */
+.sheet-named-wisdom,.sheet-named-nature {display:none;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="wisdom_ages"]:checked) .sheet-named-wisdom {display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="affinity_nature"]:checked) .sheet-named-nature {display:block;}
+.sheet-named-wisdom button {background:#861217;color:#fff;border:1px solid #a84c50;border-radius:3px;padding:8px 12px;cursor:pointer;}
+.sheet-named-nature label {display:flex;flex-direction:column;gap:6px;}
+.sheet-heritage-core {font-size:11px;line-height:1.5;max-width:100%;margin:6px 0;}
+.sheet-advantage-warning:has(span:empty) {display:none;}
+
+/* .37 Core advantage mirror: no repeating rows or duplicated rules. */
+.sheet-core-advantage-slot>input[value="0"]+.sheet-core-advantage-card {display:none;}
+.sheet-core-advantage-card {border-top:1px solid #777;padding:10px 0;}
+.sheet-core-advantage-heading {display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.sheet-core-advantage-heading>strong {flex:1;min-width:140px;}
+.sheet-core-advantage-heading>span {font-size:11px;}
+.sheet-core-advantages p {font-size:12px;line-height:1.5;white-space:pre-wrap;}
+.sheet-core-advantages button {background:#861217;color:#fff;border:1px solid #a84c50;border-radius:3px;padding:6px 10px;cursor:pointer;}
+.sheet-core-adv-env-state[value="0"]+.sheet-core-adv-environment {display:none;}
+.sheet-core-adv-environment {display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0;}
+.sheet-core-adv-environment select {max-width:100%;}
+.sheet-core-advantage-pages {display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0;}
+.sheet-core-advantage-card details>summary {cursor:pointer;font-size:12px;}
+
+/* .38 Attack chat readability. */
+.sheet-rolltemplate-ccattack2 .sheet-template-row,.sheet-rolltemplate-ccattack2 .sheet-template-result {line-height:1.6;}
+.sheet-rolltemplate-ccattack2 .sheet-template-row>span,.sheet-rolltemplate-ccattack2 .sheet-template-result>span {margin-right:6px;}
+.sheet-rolltemplate-ccattack2 .sheet-template-damage-formula {font-size:11px;font-weight:normal;}
+.sheet-rolltemplate-ccattack2 .sheet-template-damage-formula strong {font-weight:normal;}
+.sheet-rolltemplate-ccattack2 .sheet-template-notes {margin-top:6px;line-height:1.5;}
+
+/* .39 Next nine guided advantages. */
+.sheet-named-batch-check {display:none;}
+.sheet-named-batch-check button {background:#861217;color:white;border:1px solid #a84c50;border-radius:3px;padding:8px 12px;}
+.sheet-named-batch-check label {display:flex;gap:8px;margin:8px 0;align-items:center;flex-wrap:wrap;}
+.sheet-batch-level input {width:auto;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="goblin_slayer"]:checked) .sheet-named-hunter {display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="kobold_hunter"]:checked) .sheet-named-hunter {display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="scrounger"]:checked) .sheet-named-batch-check {display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="keen_senses"]:checked) .sheet-named-batch-check {display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="improviser"]:checked) .sheet-named-batch-check {display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="bloodhound"]:checked) .sheet-named-batch-check {display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="improviser"]:checked) .sheet-batch-attribute {display:none;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="bloodhound"]:checked) .sheet-batch-attribute {display:none;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="keen_senses"]:checked) .sheet-batch-level {display:none;}
+
+/* .40 Check chat labels remain readable without flex layout. */
+.sheet-rolltemplate-ccability2 .sheet-template-row,.sheet-rolltemplate-ccability2 .sheet-template-result {line-height:1.6;}
+.sheet-rolltemplate-ccability2 .sheet-template-row>span,.sheet-rolltemplate-ccability2 .sheet-template-result>span {margin-right:6px;}
+
+/* .41 Fighting controls */
+.sheet-named-tradeoff{display:none;}
+.sheet-named-tradeoff label{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.sheet-fighting-controls{padding:10px;margin:10px 0;}
+.sheet-fighting-controls h2{font-size:16px;}
+.sheet-fighting-grid,.sheet-weapon-penalties{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0;}
+.sheet-fighting-grid label,.sheet-weapon-penalties label{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.sheet-fighting-grid input[type=number],.sheet-weapon-penalties input[type=number]{width:90px;}
+.sheet-fighting-controls p{font-size:12px;line-height:1.5;}
+.sheet-fighting-controls button{background:#861217;color:white;border:1px solid #a84c50;padding:6px 10px;margin:6px 8px 6px 0;border-radius:3px;}
+.sheet-fighting-warning{font-weight:bold;}
+.sheet-fighting-controls select{max-width:100%;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="power_attack"]:checked) .sheet-named-tradeoff{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="powerful_hurl"]:checked) .sheet-named-tradeoff{display:block;}
+
+/* .42 Combat settings accordion. */
+.sheet-fighting-controls>summary{cursor:pointer;font-size:14px;font-weight:bold;padding:6px 0;}
+
+/* .43 Player-requested guided advantages */
+.sheet-player-action,.sheet-player-riposte,.sheet-player-training,.sheet-player-followup,.sheet-player-shadows,.sheet-core-player-riposte{display:none;}
+.sheet-advantage-guided [class^="sheet-player-"] label{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;}
+.sheet-advantage-guided [class^="sheet-player-"] input[type=number]{width:120px;}
+.sheet-advantage-guided [class^="sheet-player-"] input[type=checkbox]{width:auto;}
+.sheet-advantage-guided [class^="sheet-player-"] select{max-width:100%;}
+.sheet-advantage-guided [class^="sheet-player-"] button{background:#861217;color:white;border:1px solid #a84c50;border-radius:3px;padding:8px 12px;margin:5px 8px 5px 0;}
+.sheet-core-player-riposte{gap:8px;align-items:center;flex-wrap:wrap;}
+.sheet-core-player-kind[value="sacrificing_riposte"]+.sheet-core-player-riposte{display:flex;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="sacrificing_riposte"]:checked) .sheet-player-action{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="sacrificing_riposte"]:checked) .sheet-player-riposte{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="sacrificing_riposte"]:checked) .sheet-player-followup,.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="sacrificing_riposte"]:checked) .sheet-named-master{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="fleet_foot"]:checked) .sheet-player-action{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="cleaving_strike"]:checked) .sheet-player-action{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="cleaving_strike"]:checked) .sheet-player-followup,.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="cleaving_strike"]:checked) .sheet-named-master{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="enhanced_empathy"]:checked) .sheet-player-action{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="master_shadows"]:checked) .sheet-player-action{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="master_shadows"]:checked) .sheet-player-shadows{display:block;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="halfelf_training"]:checked) .sheet-player-training,.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="halfelf_training"]:checked) .sheet-named-master{display:block;}
+
+/* .44 Apprentice’s Bolt */
+.sheet-player-bolt,.sheet-core-player-bolt{display:none;}
+.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="apprentice_bolt"]:checked) .sheet-player-bolt,.sheet-advantage-guided:has(select[name="attr_advantage_template"] option[value="apprentice_bolt"]:checked) .sheet-player-action{display:block;}
+.sheet-core-player-kind[value="apprentice_bolt"]~.sheet-core-player-bolt{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+
+/* .45 Unconditional Advantage attack display */
+.sheet-attack-advantage-note{font-size:11px;line-height:1.35;color:#b8b8bd;}
+.sheet-readied-row>.sheet-attack-advantage-note{grid-column:1 / -1;display:block;}
+.sheet-attack-advantage-note:empty{display:none;}
+
+.sheet-core-spell-pages{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:5px;}
+.sheet-core-spell-pages button{background:#861217;color:white;border:1px solid #a84c50;border-radius:3px;padding:5px 10px;}
+
+/* Separate player-owned lifetime XP ledger. */
+.charsheet .sheet-character-xp-record {margin:12px 0;padding:12px;border:1px solid #555;background:rgba(255,255,255,.025);}
+.charsheet .sheet-character-xp-record label {display:block;margin-bottom:6px;font-weight:bold;}
+.charsheet .sheet-character-xp-record input {width:190px;max-width:100%;box-sizing:border-box;}
+.charsheet .sheet-character-xp-record p {margin:8px 0 0;line-height:1.5;font-size:12px;}
+
+.charsheet .sheet-character-xp-record details {margin-top:12px;}
+.charsheet .sheet-character-xp-record textarea {display:block;width:100%;box-sizing:border-box;min-height:180px;margin-top:10px;}
+.charsheet .sheet-character-xp-record button {margin:4px 8px 4px 0;}
+
+/* Explicit disclosure markers survive host resets of native details markers. */
+.charsheet details > summary {list-style:none;cursor:pointer;}
+.charsheet details > summary::-webkit-details-marker {display:none;}
+.charsheet details > summary::marker {content:"";}
+.charsheet details > summary::before {content:"";display:inline-block;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid currentColor;margin-right:8px;vertical-align:middle;transform-origin:3px 4px;}
+.charsheet details[open] > summary::before {transform:rotate(90deg);}
+
+/* Explicit XP palette: readable under host/browser light and dark form themes. */
+.charsheet .sheet-cc .sheet-character-xp-record {background:#29292c;color:#f4f4f4;color-scheme:dark;}
+.charsheet .sheet-cc .sheet-character-xp-record input[type="text"],
+.charsheet .sheet-cc .sheet-character-xp-record textarea {background:#202023 !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;border:1px solid #77777f !important;opacity:1 !important;}
+.charsheet .sheet-cc .sheet-character-xp-record input::placeholder,
+.charsheet .sheet-cc .sheet-character-xp-record textarea::placeholder {color:#bcbcc5 !important;-webkit-text-fill-color:#bcbcc5 !important;opacity:1;}
+.charsheet .sheet-cc .sheet-character-xp-record button[type="action"] {background:#8b1118 !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;border:1px solid #c44b53 !important;border-radius:4px;padding:7px 10px;text-shadow:none !important;box-shadow:none !important;opacity:1 !important;cursor:pointer;}
+.charsheet .sheet-cc .sheet-character-xp-record button[type="action"]:hover {background:#a21c25 !important;}
+.charsheet .sheet-cc .sheet-character-xp-record button[type="action"]:focus-visible,
+.charsheet .sheet-cc .sheet-character-xp-record input:focus-visible,
+.charsheet .sheet-cc .sheet-character-xp-record textarea:focus-visible,
+.charsheet .sheet-cc .sheet-character-xp-record summary:focus-visible {outline:2px solid #ffd775 !important;outline-offset:2px;}
+
+/* Spell summaries already have their own chevron. A generated grid item shifts all columns. */
+.charsheet .sheet-cc details > summary.sheet-spell-collapsed::before {content:none !important;display:none !important;}
+.charsheet .sheet-cc .sheet-spell-collapsed {display:grid !important;grid-template-columns:14px minmax(0,1fr) minmax(80px,145px) 78px 100px 46px !important;gap:5px !important;width:100% !important;min-width:0 !important;box-sizing:border-box !important;}
+.charsheet .sheet-cc .sheet-spell-collapsed > * {min-width:0;max-width:100%;box-sizing:border-box;}
+.charsheet .sheet-cc .sheet-spell-collapsed-name {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.charsheet .sheet-cc .sheet-spell-memorized-toggle {display:inline-flex !important;align-items:center;gap:4px;font-size:10px !important;margin:0 !important;width:auto !important;}
+.charsheet .sheet-cc .sheet-spell-memorized-toggle span {font-size:10px !important;}
+.charsheet .sheet-cc .sheet-spell-owner-picker {flex-wrap:wrap;}
+@media(max-width:600px){
+ .charsheet .sheet-cc .sheet-spell-collapsed {grid-template-columns:14px minmax(0,1fr) 46px !important;}
+ .charsheet .sheet-cc .sheet-spell-chevron {grid-column:1;grid-row:1;}
+ .charsheet .sheet-cc .sheet-spell-collapsed-name {grid-column:2;grid-row:1;}
+ .charsheet .sheet-cc .sheet-spell-collapsed-level {grid-column:3;grid-row:1;}
+ .charsheet .sheet-cc .sheet-spell-owner-picker {grid-column:2;grid-row:2;}
+ .charsheet .sheet-cc .sheet-spell-unavailable-badge {grid-column:2;grid-row:3;justify-self:start;width:auto;}
+ .charsheet .sheet-cc .sheet-spell-memorized-toggle {grid-column:2 / 4;grid-row:4;}
+}
+.charsheet .sheet-cc .sheet-multi-hp-panel {background:#303034 !important;color:#f2f2f4 !important;border-color:#55555d !important;}
+.charsheet .sheet-cc .sheet-multi-hp-title {color:#e5c57a !important;}
+.charsheet .sheet-cc .sheet-multi-hp-help {color:#e1e1e7 !important;line-height:1.5;}
+.charsheet .sheet-cc .sheet-multi-class-facts > div > span {color:#c9c9cf !important;}
+.charsheet .sheet-cc .sheet-named-summary,.charsheet .sheet-cc .sheet-named-summary span {color:#f2f2f4 !important;line-height:1.5;}
+.charsheet .sheet-cc .sheet-weapon-2h-button {font-size:10px !important;line-height:1.3 !important;padding:5px 6px !important;height:auto !important;min-height:27px;box-sizing:border-box;white-space:nowrap;color:#fff !important;-webkit-text-fill-color:#fff !important;text-shadow:none !important;background:#303033 !important;}
+
+/* Character writing space: two columns, then a single column in narrow windows. */
+.charsheet .sheet-cc .sheet-character-notes-grid {grid-column:1 / -1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;min-width:0;margin-top:8px;}
+.charsheet .sheet-cc .sheet-character-notes-grid label {min-width:0;margin:0;display:flex;flex-direction:column;gap:6px;}
+.charsheet .sheet-cc .sheet-character-notes-grid label > span {color:#dedee5 !important;font-size:11px;font-weight:700;}
+.charsheet .sheet-cc .sheet-character-notes-grid textarea {width:100%;min-width:0;height:170px;min-height:170px;box-sizing:border-box;resize:vertical;background:#202023 !important;color:#fff !important;border:1px solid #62626b !important;line-height:1.5;padding:8px;}
+@media(max-width:600px){.charsheet .sheet-cc .sheet-character-notes-grid {grid-template-columns:minmax(0,1fr);}}
+
+/* Monster page */
+.sheet-page-state[value="monster"] ~ .sheet-page-monster { display:block; }
+.sheet-page-state[value="monster"] ~ .sheet-tabs button[name="act_show_monster"] { background:#800000; color:#fff; }
+.sheet-page-monster .sheet-monster-panel { margin:0 0 12px; padding:12px; border:1px solid #666; }
+.sheet-page-monster .sheet-monster-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px 12px; }
+.sheet-page-monster label { display:block; min-width:0; }
+.sheet-page-monster input, .sheet-page-monster textarea, .sheet-page-monster select { display:block; width:100%; box-sizing:border-box; }
+.sheet-page-monster textarea { resize:vertical; }
+.sheet-page-monster .sheet-monster-actions { display:flex; flex-wrap:wrap; align-items:end; gap:8px; margin:8px 0; }
+.sheet-page-monster summary { cursor:pointer; font-weight:bold; }
+
+/* Monster stat-block headings and field labels */
+.sheet-page-monster .sheet-page-header h2 {
+    text-transform: uppercase;
+}
+
+.sheet-page-monster .sheet-monster-panel h3,
+.sheet-page-monster .sheet-monster-panel summary {
+    font-size: 9px;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+
+.sheet-page-monster .sheet-monster-panel label {
+    font-size: 9px;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+
+.sheet-page-monster .sheet-monster-panel label input,
+.sheet-page-monster .sheet-monster-panel label select,
+.sheet-page-monster .sheet-monster-panel label textarea {
+    text-transform: none;
+    font-size: 13px;
+}
+
+/* Monster stat block import controls */
+.sheet-page-monster button[name="act_monster_review"],
+.sheet-page-monster button[name="act_monster_apply"] {
+    background: #8f0d12 !important;
+    color: #fff !important;
+    border: 1px solid #bd4449 !important;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.sheet-page-monster button[name="act_monster_review"]:hover,
+.sheet-page-monster button[name="act_monster_apply"]:hover {
+    background: #a51d23 !important;
+}
+
+.sheet-page-monster button[name="act_monster_review"]:focus-visible,
+.sheet-page-monster button[name="act_monster_apply"]:focus-visible {
+    outline: 2px solid #d7b45a;
+    outline-offset: 2px;
+}
+
+/* Append to the existing Roll20 sheet CSS. */
+.sheet-spellbook-filtered[value="1"] + .sheet-spell-card { display: none !important; }
+.sheet-spellbook-search { justify-content: flex-start; }
+.sheet-spellbook-search label { display: flex; align-items: center; gap: 5px; width: auto; margin: 0; }
+.sheet-spellbook-search input { width: 11em; }
+.sheet-spellbook-search select { width: auto; }
