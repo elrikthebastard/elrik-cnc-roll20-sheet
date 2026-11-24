@@ -14,6 +14,17 @@ The guiding principle is simple:
 
 The sheet automates arithmetic and repetitive bookkeeping where practical. Rules decisions, situational modifiers, character choices, and Castle Keeper judgement remain with the players and CK.
 
+## Latest Development Build
+
+**v0.21.54.23.63** is available in this repository. The update for Roll20’s sheet catalogue is in [draft PR #15715](https://github.com/Roll20/roll20-character-sheets/pull/15715).
+
+- Filter saved Spellbook entries by spell name and spell level.
+- Build characters with the Archer or 2018 Ethereal Knight class.
+- Use the Monster tab for creature stat blocks.
+- Roll Intuition as an Intelligence check with its +2 bonus. Live retesting is pending.
+
+See the [release notes](docs/RELEASE-NOTES-0.21.54.23.63.md) for this build.
+
 ## Current Goals
 
 - Complete support for the core C&C character classes
@@ -34,7 +45,7 @@ The sheet automates arithmetic and repetitive bookkeeping where practical. Rules
 
 Testing and feedback are welcome.
 
-Please use the **Issues** section of this repository to report:
+Please use [GitHub Issues](https://github.com/elrikthebastard/elrik-cnc-roll20-sheet/issues) to report:
 
 - Bugs or unexpected behaviour
 - Rules corrections
@@ -54,4 +65,4 @@ Castles & Crusades® is a product of Troll Lord Games.
 
 This is an independently developed community character sheet and is not intended to replace the Castles & Crusades rulebooks.
 
-Additional licensing and compatibility information will be added before public release.
+The sheet is available through Roll20’s community sheet catalogue. Development builds and release notes are tracked here.
